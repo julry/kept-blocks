@@ -1,24 +1,84 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { ProgressProvider } from './context/ProgressContext';
+import { useProgressInit } from './hooks/useProgressInit';
+import { FlexWrapper } from './components/shared/FlexWrapper';
+
+const Wrapper = styled(FlexWrapper)`
+  --rectPart: calc((100vw - 60px) / 4);
+  --rectSize: min(var(--rectPart), 90px);
+  --accentColor: #531A54;
+  --accentBorderColor: #531A54;
+  --mainColor: #A39CFC;
+  --secondColor: #7741FB;
+  --mainBorderColor: #948BFF;
+  --borderRadius: calc(var(--rectSize) * 10 / 80);
+  --smallRadius: calc(var(--rectSize) * 5 / 80);
+  --boxShadow: 6px 5px 5px 0px rgba(228, 228, 239, 0.15) inset, -6px -5px 5px 0px rgba(228, 228, 239, 0.15) inset;
+  height: ${({height}) => height}px;
+  overflow-x: hidden;
+  align-items: center;
+  white-space: pre-line;
+  
+  @media screen and (min-width: 450px) and (max-height: 800px) {
+    --rectSize: min(var(--rectPart), 85px);
+  }
+
+  @media screen and (min-width: 450px) and (max-height: 700px) {
+    --rectSize: min(var(--rectPart), 75px);
+  }
+
+  @media screen and (min-width: 450px) and (max-height: 600px) {
+    --rectSize: min(var(--rectPart), 65px);
+  }
+`;
+
+const ComponentWrapper = styled(FlexWrapper)`
+  position: relative;
+  max-width: 640px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  @media screen and (min-width: 640px) {
+    max-width: 450px;
+    max-height: 900px;
+    margin: 20px auto;
+    border: 3px solid var(--accentColor);
+    border-radius: 20px;
+  }
+`;
 
 function App() {
+  const [height, setHeight] = useState(100);
+  const progress = useProgressInit();
+  const {screen} = progress;
+
+  const Component = screen?.component || (() => null);
+
+  useEffect(() => {
+    function handleResize() {
+      const viewportHeight = document.documentElement.clientHeight;
+      setHeight(viewportHeight);
+    }
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <ProgressProvider value={progress}>
+        <Wrapper height={height}>
+          <ComponentWrapper>
+            <Component />
+          </ComponentWrapper>
+        </Wrapper>
+      </ProgressProvider>
   );
 }
 
