@@ -99,11 +99,12 @@ export const Game = ({
                 const changedBlocks = [...prevBlocks];
                 if ((isDoubleHeight &&
                     changedBlocks.find(shownBlock => (
-                        shownBlock.x === x && shownBlock.y >= block.y
+                        (shownBlock.x === x || (shownBlock.width === rectTypes.gameDouble && x - shownBlock.x === 1))
+                        && shownBlock.y >= block.y
                         && shownBlock.y - block.y <= 1
                         && shownBlock.id !== block.id)))
                     || (isDoubleWidth && changedBlocks.find(shownBlock => (
-                        shownBlock.y === y
+                        (shownBlock.y === y || (shownBlock.height === rectTypes.gameDouble && y - shownBlock.y === 1))
                         && shownBlock.x >= block.x
                         && shownBlock.x - block.x <= 1
                         && shownBlock.id !== block.id)
@@ -157,7 +158,7 @@ export const Game = ({
                                 onDrop={handleDrop}
                                 onDragStart={onDragStart}
                             >
-                                {BlockComponent && <BlockComponent/>}
+                                {BlockComponent && <BlockComponent />}
                             </Board>
                         </BoardWrapperStyled>
                         {children}

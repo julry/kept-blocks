@@ -23,5 +23,5 @@ export const Board = ({blocks, onDrop, rowsAmount, phrases, children, onDragStar
             ))}
             {children}
         </Wrapper>
-    )
-}
+    );
+};

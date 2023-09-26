@@ -9,11 +9,11 @@ const Wrapper = styled.div`
   left: calc(${({x}) => x} * var(--rectSize));
   
   & div {
-    border: 1px solid ${({color}) => color === 'accent' ? 'var(--accentColor)' : 'var(--mainBorderColor)'};
+    border: 1px solid ${({isMain}) => isMain ? 'var(--accentColor)' : 'var(--mainBorderColor)'};
   }
 `;
 
-export const Block = ({block, onDragStart, children}) => {
+export const Block = ({block, onDragStart, children, className}) => {
     const [_, drag] = useDrag(() => ({
         type: 'BLOCK',
         item: () => {
@@ -26,7 +26,7 @@ export const Block = ({block, onDragStart, children}) => {
     }), [block]);
 
     return (
-        <Wrapper ref={drag} {...block}>
+        <Wrapper ref={drag} {...block} className={className}>
             <Rectangle {...block} color={block.isMain ? "accent" : "main"}> {children} </Rectangle>
         </Wrapper>
     )

@@ -4,7 +4,8 @@ import { useProgress } from '../../../hooks/useProgress';
 import { Game } from '../../shared/Game';
 import { reachMetrikaGoal } from '../../../utils/reachMetrikaGoal';
 import { RefreshButton } from '../../shared/RefreshButton';
-import { blocks, borderBottom, borderTop, phrases, styles } from './constants';
+import { blocks, borderBottom, borderTop, initialMainBlock, phrases, styles } from './constants';
+import { MainBlock } from './MainBlock';
 
 export const RefreshButtonStyled = styled(RefreshButton)`
   margin-top: min(25px, 8.5vw);
@@ -24,6 +25,7 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 
 export const Screen6 = () => {
     const [shownBlocks, setShownBlocks] = useState([...blocks]);
+    const [mainBlock, setMainBlock] = useState({...initialMainBlock});
 
     const {next} = useProgress();
 
@@ -66,6 +68,7 @@ export const Screen6 = () => {
             setShownBlocks={setShownBlocks}
             winCol={2}
             winRow={0}
+            BlockComponent={() => <MainBlock block={mainBlock}/>}
         >
             <RefreshButtonStyled />
         </Game>

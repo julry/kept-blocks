@@ -90,6 +90,10 @@ export const blocks = [
     },
 ];
 
+export const initialMainBlock = {
+    id: 'main', x: 0, y: 4, height: rectTypes.gameDouble, width: rectTypes.gameDouble, isMain: true
+};
+
 export const phrases = [
     {
         id: 3,
