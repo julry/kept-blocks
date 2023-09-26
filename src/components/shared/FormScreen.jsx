@@ -104,6 +104,10 @@ const RadioButtonLabel = styled.label`
 
 const TextBlockStyled = styled(TextBlock)`
   padding: 30px;
+
+  @media screen and (max-height: 800px) {
+    padding: 25px;
+  }
   
   & p {
     width: auto;
@@ -164,7 +168,7 @@ export const FormScreen = ({children, className}) => {
                 />
                 <RadioIconStyled/>
                 <span>
-                    Я согласен(а) на <a href={'https://fut.ru/personal_data_policy/'} target="_blank">
+                    Я согласен(а) на <a rel="noreferrer" href={'https://fut.ru/personal_data_policy/'} target="_blank">
                     обработку персональных данных</a> и получение информационных сообщений
                 </span>
             </RadioButtonLabel>

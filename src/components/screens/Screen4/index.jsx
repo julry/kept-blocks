@@ -15,12 +15,18 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 `;
 
 export const Screen4 = () => {
+    const [shownBlocks, setShownBlocks] = useState([...blocks]);
+
     const {next} = useProgress();
 
     const handleNext = () => {
         reachMetrikaGoal('continue1');
         next();
     };
+
+    const handleRestart = () => {
+        setShownBlocks([...blocks]);
+    }
 
     const boardProps = {
         row: 2,
@@ -44,8 +50,18 @@ export const Screen4 = () => {
     }
 
     return (
-        <Game level={2} blocks={blocks} rowsAmount={4} phrases={phrases} boardProps={boardProps} cardProps={cardProps}>
-            <RefreshButtonStyled />
+        <Game
+            level={2}
+            blocks={shownBlocks}
+            rowsAmount={4}
+            phrases={phrases}
+            boardProps={boardProps}
+            cardProps={cardProps}
+            setShownBlocks={setShownBlocks}
+            winCol={0}
+            winRow={2}
+        >
+            <RefreshButtonStyled onClick={handleRestart}/>
         </Game>
     );
 };

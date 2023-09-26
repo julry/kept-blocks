@@ -21,15 +21,15 @@ const Wrapper = styled(FlexWrapper)`
   white-space: pre-line;
   
   @media screen and (min-width: 450px) and (max-height: 800px) {
-    --rectSize: min(var(--rectPart), 85px);
+    --rectSize: min(var(--rectPart), 80px);
   }
 
   @media screen and (min-width: 450px) and (max-height: 700px) {
-    --rectSize: min(var(--rectPart), 75px);
+    --rectSize: min(var(--rectPart), 70px);
   }
 
   @media screen and (min-width: 450px) and (max-height: 600px) {
-    --rectSize: min(var(--rectPart), 65px);
+    --rectSize: min(var(--rectPart), 60px);
   }
 `;
 

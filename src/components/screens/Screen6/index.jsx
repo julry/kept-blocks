@@ -23,6 +23,8 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 `;
 
 export const Screen6 = () => {
+    const [shownBlocks, setShownBlocks] = useState([...blocks]);
+
     const {next} = useProgress();
 
     const handleNext = () => {
@@ -53,7 +55,18 @@ export const Screen6 = () => {
     }
 
     return (
-        <Game level={3} blocks={blocks} rowsAmount={6} phrases={phrases} boardProps={boardProps} cardProps={cardProps} isFinished={true}>
+        <Game
+            level={3}
+            blocks={shownBlocks}
+            rowsAmount={6}
+            phrases={phrases}
+            boardProps={boardProps}
+            cardProps={cardProps}
+            isFinished={true}
+            setShownBlocks={setShownBlocks}
+            winCol={2}
+            winRow={0}
+        >
             <RefreshButtonStyled />
         </Game>
     );

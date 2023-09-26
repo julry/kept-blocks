@@ -36,6 +36,7 @@ const TextBlockStyled = styled(TextBlock)`
   bottom: calc(var(--rectSize) * 3 + 5px);
   left: -5px;
   box-shadow: 0 4px 10px #FFFFFF;
+  z-index: 101;
 `;
 
 const ArrowRight = styled.div`
@@ -75,6 +76,23 @@ const ModalText = styled.p`
   }
 `;
 
+const BoardWrapperStyled = styled(BoardWrapper)`
+  margin-top: min(183px, 46.5vw);
+
+  @media screen and (max-height: 800px) {
+    margin-top: min(130px, 34vw);
+  }
+
+  @media screen and (max-height: 700px) {
+    margin-top: min(80px, 21vw);
+  }
+
+  @media screen and (max-height: 600px) {
+    margin-top: min(70px, 23.5vw);
+  }
+`;
+
+
 export const Screen2 = () => {
     const [step, setStep] = useState(0);
     const {next} = useProgress();
@@ -95,7 +113,7 @@ export const Screen2 = () => {
         <>
             <GameWrapper $isBlurred={!isFirstStep}>
                 <Header shownTime="00:05" level={1}/>
-                <BoardWrapper rowsAmount={4} row={2} column={4} borderTop={borderTop} borderBottom={borderBottom}>
+                <BoardWrapperStyled rowsAmount={4} row={2} column={4} borderTop={borderTop} borderBottom={borderBottom}>
                     {isFirstStep && (
                         <>
                             <TextBlockStyled>
@@ -108,9 +126,9 @@ export const Screen2 = () => {
                             <ArrowRight/>
                         </>
                     )}
-                    <Board blocks={blocks} rowsAmount={4} phrases={phrases}/>
+                    <Board blocks={blocks} rowsAmount={4} phrases={phrases} isNotDrop/>
                     <Accent width={rectTypes.game} height={rectTypes.game}/>
-                </BoardWrapper>
+                </BoardWrapperStyled>
                 {isFirstStep ? (
                     <ButtonStyled type={buttonTypes.main} onClick={handleChangeStep}>Далее</ButtonStyled>
                 ) : (

@@ -2,12 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useProgress } from '../../hooks/useProgress';
 import { reachMetrikaGoal } from '../../utils/reachMetrikaGoal';
-import { Rectangle } from '../shared/Rectangle';
-import { TopElement } from '../shared/TopElement';
 import { FlexWrapper } from '../shared/FlexWrapper';
-import { Button, buttonTypes } from '../shared/Button';
 import { FormScreen } from '../shared/FormScreen';
-import { TextMd, Title } from '../shared/Texts';
+import { Title } from '../shared/Texts';
 
 const Wrapper = styled(FlexWrapper)`
   align-items: center;

@@ -29,7 +29,6 @@ const appear = keyframes`
 const Block = styled(TextBlock)`
   opacity: 0;
   animation: ${appear} ${ANIMATION_DELAY}ms ease-in forwards;
-  animation-delay: ${ANIMATION_DELAY}ms;
 `;
 
 export const Modal = (props) => (
