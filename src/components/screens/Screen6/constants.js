@@ -88,11 +88,15 @@ export const blocks = [
         width: rectTypes.gameDouble,
         height: rectTypes.game,
     },
+    {
+        id: 'main',
+        x: 0,
+        y: 4,
+        height: rectTypes.gameDouble,
+        width: rectTypes.gameDouble,
+        isMain: true
+    }
 ];
-
-export const initialMainBlock = {
-    id: 'main', x: 0, y: 4, height: rectTypes.gameDouble, width: rectTypes.gameDouble, isMain: true
-};
 
 export const phrases = [
     {
@@ -137,3 +141,98 @@ export const styles = `
         margin-top: min(17px, 6vw) !important;
     }
 `;
+
+export const empties = [
+    {
+        x: 0,
+        y: 0,
+    },
+    {
+        x: 3,
+        y: 1,
+    },
+    {
+        x: 0,
+        y: 2,
+    },
+    {
+        x: 3,
+        y: 5,
+    },
+];
+
+
+// export const empties = [
+//     {
+//         x: 0,
+//         y: 0,
+//     },
+//     {
+//         x: 0,
+//         y: 1,
+//     },
+//     {
+//         x: 0,
+//         y: 2,
+//     },
+//     {
+//         x: 2,
+//         y: 0,
+//     },
+//     {
+//         x: 2,
+//         y: 1,
+//     },
+//     {
+//         x: 2,
+//         y: 2,
+//     },
+//     {
+//         x: 2,
+//         y: 3,
+//     },
+//     {
+//         x: 3,
+//         y: 0,
+//     },
+//     {
+//         x: 3,
+//         y: 1,
+//     },
+//     {
+//         x: 3,
+//         y: 2,
+//     },
+// ];
+
+// export const blocks = [
+//     {
+//         id: 2,
+//         x: 1,
+//         y: 0,
+//         width: rectTypes.game,
+//         height: rectTypes.game,
+//     },
+//     {
+//         id: 0,
+//         x: 1,
+//         y: 1,
+//         width: rectTypes.game,
+//         height: rectTypes.game,
+//     },
+//     {
+//         id: 7,
+//         x: 3,
+//         y: 3,
+//         width: rectTypes.game,
+//         height: rectTypes.game,
+//     },
+//     {
+//         id: 'main',
+//         x: 0,
+//         y: 2,
+//         height: rectTypes.gameDouble,
+//         width: rectTypes.gameDouble,
+//         isMain: true
+//     }
+// ];

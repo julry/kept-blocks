@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   grid-template-rows: repeat(4, 1fr);
 `;
 
-export const Board = ({blocks, onDrop, rowsAmount, phrases, children, onDragStart, isNotDrop}) => {
+export const Board = ({blocks, onDrop, rowsAmount, phrases, children, onDragStart, isNotDrop, isComplicatedMain}) => {
     const CellComponent = isNotDrop ? NotDropCell : Cell;
     const BlockComponent = isNotDrop ? NotDragBlock : Block;
     return (
@@ -19,7 +19,7 @@ export const Board = ({blocks, onDrop, rowsAmount, phrases, children, onDragStar
                 </CellComponent>
             ))}
             {blocks.map(block => (
-                <BlockComponent key={block.id} block={block} onDragStart={onDragStart} />
+                <BlockComponent key={block.id} block={block} onDragStart={onDragStart} isComplicatedMain={isComplicatedMain}/>
             ))}
             {children}
         </Wrapper>

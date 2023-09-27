@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Rectangle } from './Rectangle';
 import { useDrag } from 'react-dnd';
+import { ComplicatedMainBlock } from './ComplicatedMainBlock';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -13,11 +14,10 @@ const Wrapper = styled.div`
   }
 `;
 
-export const Block = ({block, onDragStart, children, className}) => {
+export const Block = ({block, isComplicatedMain, className}) => {
     const [_, drag] = useDrag(() => ({
         type: 'BLOCK',
         item: () => {
-            onDragStart?.(block);
             return block;
         },
         collect: monitor => ({
@@ -25,9 +25,11 @@ export const Block = ({block, onDragStart, children, className}) => {
         }),
     }), [block]);
 
+    if (isComplicatedMain && block.isMain) return <ComplicatedMainBlock innerRef={drag} block={block}/>
+
     return (
         <Wrapper ref={drag} {...block} className={className}>
-            <Rectangle {...block} color={block.isMain ? "accent" : "main"}> {children} </Rectangle>
+            <Rectangle {...block} color={block.isMain ? "accent" : "main"} />
         </Wrapper>
     )
 }

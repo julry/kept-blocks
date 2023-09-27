@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { useDrag } from 'react-dnd';
-import { Rectangle, rectTypes } from '../../shared/Rectangle';
+import { Rectangle, rectTypes } from './Rectangle';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -58,21 +57,10 @@ const RectangleStyled = styled(Rectangle)`
   }
 `;
 
-export const MainBlock = ({block, onDragStart}) => {
-    const [_, drag] = useDrag(() => ({
-        type: 'BLOCK',
-        item: () => {
-            onDragStart?.(block);
-            return block;
-        },
-        collect: monitor => ({
-            isDragging: monitor.isDragging(),
-        }),
-    }), [block]);
-
+export const ComplicatedMainBlock = ({block, innerRef}) => {
     const additionalBlock = {...block, x: block.x + 1, height: rectTypes.game}
     return (
-        <Wrapper ref={drag} {...block}>
+        <Wrapper ref={innerRef} {...block}>
             <Rectangle {...block} color="accent" />
             <RectangleStyled {...additionalBlock} color="accent" />
         </Wrapper>

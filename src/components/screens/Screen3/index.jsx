@@ -4,7 +4,7 @@ import { Game } from '../../shared/Game';
 import { reachMetrikaGoal } from '../../../utils/reachMetrikaGoal';
 import { RefreshButton } from '../../shared/RefreshButton';
 import styled from 'styled-components';
-import { blocks, borderBottom, borderTop, phrases } from './constants';
+import { blocks, borderBottom, borderTop, empties, phrases } from './constants';
 
 export const RefreshButtonStyled = styled(RefreshButton)`
   margin-top: min(81px, 20.7vw);
@@ -16,6 +16,7 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 
 export const Screen3 = () => {
     const [shownBlocks, setShownBlocks] = useState([...blocks]);
+    const [emptyCells, setEmptyCells] = useState([...empties]);
     const {next} = useProgress();
 
     const handleNext = () => {
@@ -24,6 +25,7 @@ export const Screen3 = () => {
     };
 
     const handleRestart = () => {
+        setEmptyCells([...empties]);
         setShownBlocks([...blocks]);
     }
 
@@ -59,6 +61,7 @@ export const Screen3 = () => {
             setShownBlocks={setShownBlocks}
             winCol={3}
             winRow={2}
+            setEmptyCells={setEmptyCells}
         >
             <RefreshButtonStyled onClick={handleRestart}/>
         </Game>

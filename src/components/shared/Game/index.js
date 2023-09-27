@@ -48,11 +48,11 @@ export const Game = ({
      rowsAmount,
      cardProps,
      isFinish,
-     BlockComponent,
      onDragStart,
      setShownBlocks,
      winCol,
      winRow,
+     setEmptyCells,
      children
 }) => {
     const [isTimer, setIsTimer] = useState(true);
@@ -68,23 +68,27 @@ export const Game = ({
         if (isFinished) return;
         let x = id % 4;
         let y = Math.floor(id / 4);
+
         const isRect = block.height === rectTypes.game && block.width === rectTypes.game;
         const isDoubleHeight = block.height === rectTypes.gameDouble;
         const isDoubleWidth = block.width === rectTypes.gameDouble;
+
         if (isRect && x !== block.x && y !== block.y) return;
 
         let isNearRow = Math.abs(block.x - x) <= 1;
         let isNearCol = Math.abs(block.y - y) <= 1;
 
-        if (isDoubleHeight){
+        if (isDoubleHeight) {
             if (x !== block.x) {
-                if (block.y - y === 1 || y - block.y === 2) return;
+                if (!isDoubleWidth && (block.y - y === 1 || y - block.y === 2)) return;
                 else if (y - block.y === 1) y = y - 1;
             }
             isNearCol = Math.abs(block.y - y) <= 2;
             y = y + 1 > 3 ? 2 : y - block.y === 2 ? y - 1 : y;
             y = y > 0 ? y : 0;
-        } else if (isDoubleWidth) {
+        }
+
+        if (isDoubleWidth) {
             if (y !== block.y) {
                 if (block.x - x === 1 || x - block.x === 2) return;
                 else if (x - block.x === 1) x = x - 1;
@@ -95,34 +99,128 @@ export const Game = ({
         }
 
         if (isNearRow && isNearCol) {
-            setShownBlocks(prevBlocks => {
-                const changedBlocks = [...prevBlocks];
-                if ((isDoubleHeight &&
-                    changedBlocks.find(shownBlock => (
-                        (shownBlock.x === x || (shownBlock.width === rectTypes.gameDouble && x - shownBlock.x === 1))
-                        && shownBlock.y >= block.y
-                        && shownBlock.y - block.y <= 1
-                        && shownBlock.id !== block.id)))
-                    || (isDoubleWidth && changedBlocks.find(shownBlock => (
-                        (shownBlock.y === y || (shownBlock.height === rectTypes.gameDouble && y - shownBlock.y === 1))
-                        && shownBlock.x >= block.x
-                        && shownBlock.x - block.x <= 1
-                        && shownBlock.id !== block.id)
-                    ))) {
-                    return changedBlocks;
+            setEmptyCells((prevCells) => {
+                let changedEmptyCells = [...prevCells];
+                let newEmptyCells = [];
+                const {x: emptyX, y: emptyY} = block;
+
+                if (isDoubleHeight && isDoubleWidth) {
+                    if (x !== emptyX) {
+                        const isLeft = x - emptyX < 0;
+                        if (isLeft) {
+                            if (!(prevCells.find(cell => cell.x === x && cell.y === emptyY)
+                                && prevCells.find(cell => cell.x === x && cell.y === emptyY + 1))) {
+                                return prevCells;
+                            }
+
+                            newEmptyCells = newEmptyCells.concat([
+                                {x: emptyX, y: emptyY + 1}
+                            ]);
+                            changedEmptyCells = changedEmptyCells.filter(cell =>
+                                (!(cell.x === x && (cell.y === y || cell.y === emptyY + 1)))
+                            );
+                        } else {
+                            if (!(prevCells.find(cell => cell.x === x + 1 && cell.y === emptyY)
+                                && prevCells.find(cell => cell.x === x && cell.y === emptyY + 1))) {
+                                return prevCells;
+                            }
+
+                            newEmptyCells = newEmptyCells.concat([
+                                {x: emptyX, y: emptyY + 1},
+                                {x: emptyX, y: emptyY},
+                            ]);
+                            changedEmptyCells = changedEmptyCells.filter(cell =>
+                                (!((cell.x === x + 1 && cell.y === emptyY) || (cell.x === x && cell.y === emptyY + 1)))
+                            );
+                        }
+                    } else if (y !== emptyY) {
+                        const isUp = y - emptyY < 0;
+                        if (isUp) {
+                            const emptyYCells = prevCells.filter(cell => cell.y === y);
+                            if (!(emptyYCells.find(cell => cell.x === emptyX)
+                                && emptyYCells.find(cell => cell.x === emptyX + 1))) {
+                                return prevCells;
+                            }
+                            newEmptyCells = newEmptyCells.concat([
+                                {x: emptyX, y: emptyY + 1},
+                                {x: emptyX + 1, y: emptyY}
+                            ]);
+                            changedEmptyCells = changedEmptyCells.filter(cell =>
+                                (!(cell.y === y && (cell.x === emptyX || cell.x === emptyX + 1)))
+                            );
+                        } else {
+                            if (!(prevCells.find(cell => cell.x === emptyX && cell.y === y + 1)
+                                && prevCells.find(cell => cell.x === emptyX + 1 && cell.y === y))) {
+                                return prevCells;
+                            }
+                            newEmptyCells = newEmptyCells.concat([
+                                {x: emptyX + 1, y: emptyY},
+                                {x: emptyX, y: emptyY}
+                            ]);
+                            changedEmptyCells = changedEmptyCells.filter(cell =>
+                                (!((cell.y === y && cell.x === emptyX + 1) || (cell.x === emptyX  && cell.y === y + 1)))
+                            );
+                        }
+                    } else {
+                        newEmptyCells.push({x: x - emptyX < 0 ? emptyX + 1 : emptyX, y: y - emptyY < 0 ? emptyY + 1 : emptyY});
+
+                        changedEmptyCells = changedEmptyCells.filter(cell => !((cell.y === (y - emptyY < 0 ? y : y + 1)) && (cell.x === (x - emptyX < 0 ? x : x + 1))));
+                    }
+                } else {
+                    if (isDoubleHeight) {
+                        if (x !== emptyX) {
+                            const emptyXCells = prevCells.filter(cell => cell.x === x);
+                            if (!(emptyXCells.find(cell => cell.y === emptyY) && emptyXCells.find(cell => cell.y === emptyY + 1))){
+                                return prevCells;
+                            }
+                            newEmptyCells = newEmptyCells.concat([{x: emptyX, y: emptyY}, {x: emptyX, y: emptyY + 1}]);
+                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.x === x && (cell.y === y || cell.y === y + 1)));
+                        } else {
+                            newEmptyCells.push({x: emptyX, y: y - emptyY < 0 ? emptyY + 1 : emptyY});
+                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.x === x && (cell.y === (y - emptyY < 0 ? y : y + 1))));
+                        }
+                    }
+
+                    if (isDoubleWidth) {
+                        if (y !== emptyY) {
+                            const emptyYCells = prevCells.filter(cell => cell.y === y);
+                            if (!(emptyYCells.find(cell => cell.x === emptyX) && emptyYCells.find(cell => cell.x === emptyX + 1))){
+                                return prevCells;
+                            }
+                            newEmptyCells = newEmptyCells.concat([{x: emptyX, y: emptyY}, {x: emptyX + 1, y: emptyY}]);
+                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.y === y && (cell.x === emptyX || cell.x === emptyX + 1)));
+                        } else {
+                            newEmptyCells.push({x: x - emptyX < 0 ? emptyX + 1 : emptyX, y: emptyY});
+
+                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.y === y && (cell.x === (x - emptyX < 0 ? x : x + 1))));
+                        }
+                    }
+
+                    if (isRect) {
+                        newEmptyCells.push({x: emptyX, y: emptyY});
+                        changedEmptyCells = changedEmptyCells.filter(cell =>  !(cell.x === x && cell.y === y));
+                    }
                 }
 
-                const shownBlock = prevBlocks.find(prevBlock => prevBlock.id === block.id);
-                const id = prevBlocks.indexOf(shownBlock);
-                changedBlocks[id] = {...block, x, y};
-                if (block.id === 'main' && x === winCol && y === winRow) {
-                    setTimeout(() => setIsFinished(true), 300);
-                }
-                return changedBlocks;
+                // console.log(newEmptyCells);
+                changedEmptyCells = changedEmptyCells.concat(newEmptyCells);
+                // console.log(changedEmptyCells);
+                setShownBlocks((prevBlocks) => {
+                    const changedBlocks = [...prevBlocks];
+                    const shownBlock = prevBlocks.find(prevBlock => prevBlock.id === block.id);
+                    const id = prevBlocks.indexOf(shownBlock);
+                    changedBlocks[id] = {...block, x, y};
+                    if (block.id === 'main' && x === winCol && y === winRow) {
+                        setTimeout(() => setIsFinished(true), 300);
+                    }
+                    return changedBlocks;
+                });
+
+                return changedEmptyCells;
             })
         }
     };
-    
+
     const HTML5toTouch = {
         backends: [
             {
@@ -157,9 +255,8 @@ export const Game = ({
                                 phrases={phrases}
                                 onDrop={handleDrop}
                                 onDragStart={onDragStart}
-                            >
-                                {BlockComponent && <BlockComponent />}
-                            </Board>
+                                isComplicatedMain={level === 3}
+                            />
                         </BoardWrapperStyled>
                         {children}
                     </DndProvider>

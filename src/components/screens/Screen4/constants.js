@@ -84,3 +84,14 @@ export const phrases = [
         title: 'Поддержка\n24/7'
     },
 ];
+
+export const empties = [
+    {
+        x: 0,
+        y: 1,
+    },
+    {
+        x: 0,
+        y: 2,
+    },
+];
