@@ -34,7 +34,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export const Cell = ({onDrop, rowsAmount, id}) => {
+export const Cell = ({onDrop, rowsAmount, id, children}) => {
     const [_, drop] = useDrop(() => ({
         accept: 'BLOCK',
         collect: monitor => ({
@@ -45,8 +45,8 @@ export const Cell = ({onDrop, rowsAmount, id}) => {
         },
     }), []);
 
-    return <Wrapper ref={drop} $rowsAmount={rowsAmount} />
+    return <Wrapper ref={drop} $rowsAmount={rowsAmount}> {children} </Wrapper>
 };
 
 
-export const NotDropCell = ({rowsAmount}) => <Wrapper $rowsAmount={rowsAmount} />
+export const NotDropCell = ({rowsAmount, children}) => <Wrapper $rowsAmount={rowsAmount}>{children}</Wrapper>
