@@ -84,7 +84,7 @@ export const Game = ({
                 else if (y - block.y === 1) y = y - 1;
             }
             isNearCol = Math.abs(block.y - y) <= 2;
-            y = y + 1 > 3 ? 2 : y - block.y === 2 ? y - 1 : y;
+            y = y + 1 > rowsAmount - 1 ? rowsAmount - 2 : y - block.y === 2 ? y - 1 : y;
             y = y > 0 ? y : 0;
         }
 
