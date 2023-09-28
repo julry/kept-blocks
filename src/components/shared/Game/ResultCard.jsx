@@ -16,6 +16,10 @@ const Wrapper = styled.div`
   @media screen and (max-height: 700px) {
     margin-top: min(15px, 4.6vw);
   }
+
+  @media screen and (min-width: 640px) and (max-height: 700px) {
+    width: calc(100% - 60px);
+  }
 `;
 
 const Card = styled.div`
@@ -25,6 +29,7 @@ const Card = styled.div`
   position: relative;
   transition: transform 1500ms;
   transform-style: preserve-3d;
+  backface-visibility: hidden;
   ${({$isTurn}) => $isTurn ? 'transform: rotateY(180deg)' : ''};
 
   @media screen and (max-height: 800px) {
@@ -69,12 +74,13 @@ const Side = styled.div`
 const Front = styled(Side)`
   background: var(--accentColor);
   color: white;
+  z-index: 2;
 `;
 
 const Back = styled(Side)`
   transform: rotateY(180deg);
-  gap: 5rem;
   background: white;
+  z-index: 3;
 `;
 
 export const ResultCard = ({frontText, backText, level, btnText}) => {

@@ -15,6 +15,10 @@ const Wrapper = styled(FlexWrapper)`
   width: calc(var(--rectSize) * 4 + 10px);
   height: 100%;
   margin: 0 auto;
+  
+  @media screen and (min-width: 640px) and (max-height: 700px) {
+    width: calc(100% - 60px);
+  }
 `;
 
 const RectangleStyled = styled(Rectangle)`
@@ -32,6 +36,10 @@ const RectangleStyled = styled(Rectangle)`
     font-size: 18px;
   }
 
+  @media screen and (max-height: 600px) {
+    font-size: 16px;
+  }
+  
   @media screen and (max-width: 330px) {
     padding: 0 25px;
     font-size: 14px;
@@ -53,6 +61,10 @@ const ButtonStyled = styled(Button)`
 
 const FormScreenStyled = styled(FormScreen)`
   padding-top: min(70px, 14.3vw);
+  
+  & > div:nth-child(3) {
+    width: 100%;
+  }
 `;
 
 export const Screen5 = () => {
@@ -73,16 +85,18 @@ export const Screen5 = () => {
         <Wrapper>
             {isForm ?  (
                 <FormScreenStyled>
-                    <Title>
-                        Теперь тебе многое известно о нашей корпоративной культуре.
-                    </Title>
-                    <br />
-                    <TextMd>
-                        Будем ждать тебя в большой команде — мы всегда рады новым талантам! А пока предлагаем стать ещё ближе и выиграть наш мерч!
-                        <br/>
-                        <br/>
-                        Оставь свою почту, чтобы принять участие в розыгрыше! Если [дата розыгрыша] фортуна выберет тебя, мы свяжемся!»
-                    </TextMd>
+                    <div>
+                        <Title>
+                            Теперь тебе многое {'\n'}известно о нашей {'\n'}корпоративной культуре.
+                        </Title>
+                        <br />
+                        <TextMd>
+                            Будем ждать тебя в большой команде — мы всегда рады новым талантам! А пока предлагаем стать ещё ближе и выиграть наш мерч!
+                            <br/>
+                            <br/>
+                            Оставь свою почту, чтобы принять участие в розыгрыше! Если [дата розыгрыша] фортуна выберет тебя, мы свяжемся!
+                        </TextMd>
+                    </div>
                 </FormScreenStyled>
             ) : (
                 <>

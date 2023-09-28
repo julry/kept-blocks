@@ -15,6 +15,10 @@ const ButtonStyled = styled(Button)`
   margin-top: 20px;
   width: calc(var(--rectSize) * 4 + 10px);
   border-radius: 30px;
+
+  @media screen and (min-width: 640px) and (max-height: 700px) {
+    width: calc(100% - 60px);
+  }
 `;
 
 const appear = keyframes`

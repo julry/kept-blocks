@@ -80,7 +80,7 @@ export const phrases = [
         title: 'Перспективы\nдля будущего'
     },
     {
-        id: 8,
+        id: 12,
         title: 'Поддержка\n24/7'
     },
 ];

@@ -15,6 +15,10 @@ export const Title = styled.h4`
   @media screen and (max-height: 600px) {
     font-size: 14px;
   }
+  
+  @media screen and (max-width: 320px) {
+    font-size: 14px;
+  }
 `;
 
 export const TextMd = styled.p`

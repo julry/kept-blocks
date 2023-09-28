@@ -57,7 +57,7 @@ export const Game = ({
 }) => {
     const [isTimer, setIsTimer] = useState(true);
     const [isRules, setIsRules] = useState(false);
-    const [isFinished, setIsFinished] = useState(isFinish);
+    const [isFinished, setIsFinished] = useState(false);
 
     const handleTurnRules = () => {
         setIsRules(isPrevRules => !isPrevRules);
@@ -240,7 +240,7 @@ export const Game = ({
     return (
         <>
             <GameWrapper $isBlurred={isRules}>
-                <HeaderStyled level={level} isStart={isTimer} onBtnClick={handleTurnRules} $isFinished={isFinished}/>
+                <HeaderStyled level={level} isStart={isTimer && !isFinished} onBtnClick={handleTurnRules} $isFinished={isFinished}/>
                 {isFinished ? (
                     <>
                         <LogoStyled />

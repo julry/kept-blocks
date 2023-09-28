@@ -47,6 +47,10 @@ const ComponentWrapper = styled(FlexWrapper)`
     border: 3px solid var(--accentColor);
     border-radius: 20px;
   }
+
+  @media screen and (min-width: 640px) and (max-height: 600px) {
+    max-width: 400px;
+  }
 `;
 
 function App() {
