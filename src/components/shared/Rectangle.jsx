@@ -42,4 +42,8 @@ const RectangleStyled = styled.div`
   }
 `;
 
-export const Rectangle = (props) => (<RectangleStyled {...props} />);
+export const Rectangle = ({width, height, color, className, children}) => (
+    <RectangleStyled className={className} width={width} height={height} color={color}>
+        {children}
+    </RectangleStyled>
+);

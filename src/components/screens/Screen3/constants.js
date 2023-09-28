@@ -63,24 +63,15 @@ export const blocks = [
     },
 ];
 
-export const phrases = [
-    {
-        id: 4,
-        title: 'Бадди\n' +
-            'всегда\n' +
-            'поможет'
-    },
-    {
-        id: 11,
-        title: 'На «ты» \n' +
-            'с руководи-\n' +
-            'телем'
-    },
-    {
-        id: 14,
-        title: 'Друллеги'
-    },
-];
+export const phrases = {
+    4: 'Бадди\n' +
+        'всегда\n' +
+        'поможет',
+    11: 'На «ты» \n' +
+        'с руководи-\n' +
+        'телем',
+    14: 'Друллеги'
+}
 
 
 export const empties = [

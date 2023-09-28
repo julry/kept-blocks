@@ -16,6 +16,8 @@ const TYPE_TO_COLOR = {
 }
 
 const ButtonWrapper = styled.button`
+  position: relative;
+  z-index: 10;
   outline: none;
   border: none;
   background: ${({type}) => TYPE_TO_BG[type]};

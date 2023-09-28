@@ -65,7 +65,6 @@ export const Screen6 = () => {
             level={3}
             blocks={shownBlocks}
             rowsAmount={6}
-            // rowsAmount={4}
             phrases={phrases}
             boardProps={boardProps}
             cardProps={cardProps}

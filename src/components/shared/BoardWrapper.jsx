@@ -3,8 +3,8 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   position: relative;
   width: calc(var(--rectSize) * 4 + 10px);
-  height: calc(${({rowsAmount}) => rowsAmount} * var(--rectSize) + 10px);
-  min-height: calc(${({rowsAmount}) => rowsAmount} * var(--rectSize) + 10px);
+  height: calc(${({$rowsAmount}) => $rowsAmount} * var(--rectSize) + 10px);
+  min-height: calc(${({$rowsAmount}) => $rowsAmount} * var(--rectSize) + 10px);
   border-radius: 10px;
   background: var(--accentColor);
   box-shadow: 5px 5px 7px rgba(56, 56, 60, 0.25);
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     width: 5px;
     box-shadow: 5px 5px 7px rgba(56, 56, 60, 0.25);
     border-radius: 5px;
-    height: calc(${({rowsAmount}) => rowsAmount} * var(--rectSize));
+    height: calc(${({$rowsAmount}) => $rowsAmount} * var(--rectSize));
   }
 
 
@@ -84,7 +84,7 @@ export const BoardWrapper = ({
      styles,
      emptyWidth = 1
 }) => (
-    <Wrapper className={className} rowsAmount={rowsAmount} styles={styles}>
+    <Wrapper className={className} $rowsAmount={rowsAmount} styles={styles}>
         <Board>
             {children}
         </Board>

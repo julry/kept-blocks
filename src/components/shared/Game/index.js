@@ -11,6 +11,7 @@ import { Logo } from '../Logo';
 import { Modal } from '../Modal';
 import { ResultCard } from './ResultCard';
 import { rectTypes } from '../Rectangle';
+import { getChangedEmptyBlocks } from './game-utils';
 
 const HeaderStyled = styled(Header)`
     @media screen and (max-height: 600px) {
@@ -60,30 +61,26 @@ export const Game = ({
     const [isFinished, setIsFinished] = useState(false);
 
     const handleTurnRules = () => {
+        if (isFinished) return;
         setIsRules(isPrevRules => !isPrevRules);
         setIsTimer(isPrevTimer => !isPrevTimer);
     };
 
-    const handleDrop = (block, id) => {
+    const handleDropBlock = async (block, dropX, dropY) => {
         if (isFinished) return;
-        let x = id % 4;
-        let y = Math.floor(id / 4);
-
+        let x = dropX;
+        let y = dropY;
         const isRect = block.height === rectTypes.game && block.width === rectTypes.game;
         const isDoubleHeight = block.height === rectTypes.gameDouble;
         const isDoubleWidth = block.width === rectTypes.gameDouble;
 
         if (isRect && x !== block.x && y !== block.y) return;
 
-        let isNearRow = Math.abs(block.x - x) <= 1;
-        let isNearCol = Math.abs(block.y - y) <= 1;
-
         if (isDoubleHeight) {
             if (x !== block.x) {
                 if (!isDoubleWidth && (block.y - y === 1 || y - block.y === 2)) return;
                 else if (y - block.y === 1) y = y - 1;
             }
-            isNearCol = Math.abs(block.y - y) <= 2;
             y = y + 1 > rowsAmount - 1 ? rowsAmount - 2 : y - block.y === 2 ? y - 1 : y;
             y = y > 0 ? y : 0;
         }
@@ -93,118 +90,41 @@ export const Game = ({
                 if (block.x - x === 1 || x - block.x === 2) return;
                 else if (x - block.x === 1) x = x - 1;
             }
-            isNearRow = Math.abs(block.x - x) <= 2;
             x = x + 1 > 3 ? 2 : x - block.x === 2 ? x - 1 : x;
             x = x > 0 ? x : 0;
         }
 
-        if (isNearRow && isNearCol) {
-            setEmptyCells((prevCells) => {
-                let changedEmptyCells = [...prevCells];
-                let newEmptyCells = [];
-                const {x: emptyX, y: emptyY} = block;
+        let newBlock = {...block};
+        let distance = 1;
 
-                if (isDoubleHeight && isDoubleWidth) {
-                    if (x !== emptyX) {
-                        const isLeft = x - emptyX < 0;
-                        if (isLeft) {
-                            if (!(prevCells.find(cell => cell.x === x && cell.y === emptyY)
-                                && prevCells.find(cell => cell.x === x && cell.y === emptyY + 1))) {
-                                return prevCells;
-                            }
+        if (Math.abs(block.x - x) > 0) {
+            distance = block.x - x < 0 ? distance : -distance;
+            for (let i = 0; i < Math.abs(block.x - x); i++) {
+                newBlock = await handleDrop(newBlock, newBlock.x + distance, y);
+                if (!newBlock) return;
+            }
+        } else if (Math.abs(block.y - y) > 0) {
+            distance = block.y - y < 0 ? distance : -distance;
+            for (let i = 0; i < Math.abs(block.y - y); i++) {
+                newBlock = await handleDrop(newBlock, x, newBlock.y + distance);
+                if (!newBlock) return;
+            }
+        }
+    }
 
-                            newEmptyCells = newEmptyCells.concat([
-                                {x: emptyX, y: emptyY + 1}
-                            ]);
-                            changedEmptyCells = changedEmptyCells.filter(cell =>
-                                (!(cell.x === x && (cell.y === y || cell.y === emptyY + 1)))
-                            );
-                        } else {
-                            if (!(prevCells.find(cell => cell.x === x + 1 && cell.y === emptyY)
-                                && prevCells.find(cell => cell.x === x && cell.y === emptyY + 1))) {
-                                return prevCells;
-                            }
+    const handleDrop = async (block, dropX, dropY) => {
+        let x = dropX;
+        let y = dropY;
+        let newBlock;
 
-                            newEmptyCells = newEmptyCells.concat([
-                                {x: emptyX, y: emptyY + 1},
-                                {x: emptyX, y: emptyY},
-                            ]);
-                            changedEmptyCells = changedEmptyCells.filter(cell =>
-                                (!((cell.x === x + 1 && cell.y === emptyY) || (cell.x === x && cell.y === emptyY + 1)))
-                            );
-                        }
-                    } else if (y !== emptyY) {
-                        const isUp = y - emptyY < 0;
-                        if (isUp) {
-                            const emptyYCells = prevCells.filter(cell => cell.y === y);
-                            if (!(emptyYCells.find(cell => cell.x === emptyX)
-                                && emptyYCells.find(cell => cell.x === emptyX + 1))) {
-                                return prevCells;
-                            }
-                            newEmptyCells = newEmptyCells.concat([
-                                {x: emptyX, y: emptyY + 1},
-                                {x: emptyX + 1, y: emptyY}
-                            ]);
-                            changedEmptyCells = changedEmptyCells.filter(cell =>
-                                (!(cell.y === y && (cell.x === emptyX || cell.x === emptyX + 1)))
-                            );
-                        } else {
-                            if (!(prevCells.find(cell => cell.x === emptyX && cell.y === y + 1)
-                                && prevCells.find(cell => cell.x === emptyX + 1 && cell.y === y))) {
-                                return prevCells;
-                            }
-                            newEmptyCells = newEmptyCells.concat([
-                                {x: emptyX + 1, y: emptyY},
-                                {x: emptyX, y: emptyY}
-                            ]);
-                            changedEmptyCells = changedEmptyCells.filter(cell =>
-                                (!((cell.y === y && cell.x === emptyX + 1) || (cell.x === emptyX  && cell.y === y + 1)))
-                            );
-                        }
-                    } else {
-                        newEmptyCells.push({x: x - emptyX < 0 ? emptyX + 1 : emptyX, y: y - emptyY < 0 ? emptyY + 1 : emptyY});
+        const isDoubleHeight = block.height === rectTypes.gameDouble;
+        const isDoubleWidth = block.width === rectTypes.gameDouble;
 
-                        changedEmptyCells = changedEmptyCells.filter(cell => !((cell.y === (y - emptyY < 0 ? y : y + 1)) && (cell.x === (x - emptyX < 0 ? x : x + 1))));
-                    }
-                } else {
-                    if (isDoubleHeight) {
-                        if (x !== emptyX) {
-                            const emptyXCells = prevCells.filter(cell => cell.x === x);
-                            if (!(emptyXCells.find(cell => cell.y === emptyY) && emptyXCells.find(cell => cell.y === emptyY + 1))){
-                                return prevCells;
-                            }
-                            newEmptyCells = newEmptyCells.concat([{x: emptyX, y: emptyY}, {x: emptyX, y: emptyY + 1}]);
-                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.x === x && (cell.y === y || cell.y === y + 1)));
-                        } else {
-                            newEmptyCells.push({x: emptyX, y: y - emptyY < 0 ? emptyY + 1 : emptyY});
-                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.x === x && (cell.y === (y - emptyY < 0 ? y : y + 1))));
-                        }
-                    }
+        await setEmptyCells((prevCells) => {
+            const {x: emptyX, y: emptyY} = block;
+            const { changedEmptyCells, hasChanged } = getChangedEmptyBlocks({isDoubleWidth, isDoubleHeight, prevCells, emptyY, emptyX, x, y});
 
-                    if (isDoubleWidth) {
-                        if (y !== emptyY) {
-                            const emptyYCells = prevCells.filter(cell => cell.y === y);
-                            if (!(emptyYCells.find(cell => cell.x === emptyX) && emptyYCells.find(cell => cell.x === emptyX + 1))){
-                                return prevCells;
-                            }
-                            newEmptyCells = newEmptyCells.concat([{x: emptyX, y: emptyY}, {x: emptyX + 1, y: emptyY}]);
-                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.y === y && (cell.x === emptyX || cell.x === emptyX + 1)));
-                        } else {
-                            newEmptyCells.push({x: x - emptyX < 0 ? emptyX + 1 : emptyX, y: emptyY});
-
-                            changedEmptyCells = changedEmptyCells.filter(cell => !(cell.y === y && (cell.x === (x - emptyX < 0 ? x : x + 1))));
-                        }
-                    }
-
-                    if (isRect) {
-                        newEmptyCells.push({x: emptyX, y: emptyY});
-                        changedEmptyCells = changedEmptyCells.filter(cell =>  !(cell.x === x && cell.y === y));
-                    }
-                }
-
-                // console.log(newEmptyCells);
-                changedEmptyCells = changedEmptyCells.concat(newEmptyCells);
-                // console.log(changedEmptyCells);
+            if (hasChanged) {
                 setShownBlocks((prevBlocks) => {
                     const changedBlocks = [...prevBlocks];
                     const shownBlock = prevBlocks.find(prevBlock => prevBlock.id === block.id);
@@ -215,10 +135,13 @@ export const Game = ({
                     }
                     return changedBlocks;
                 });
+                newBlock = {...block, x, y};
+            }
 
-                return changedEmptyCells;
-            })
-        }
+            return changedEmptyCells;
+        });
+
+        return newBlock;
     };
 
     const HTML5toTouch = {
@@ -253,7 +176,7 @@ export const Game = ({
                                 blocks={blocks}
                                 rowsAmount={rowsAmount}
                                 phrases={phrases}
-                                onDrop={handleDrop}
+                                onDrop={handleDropBlock}
                                 onDragStart={onDragStart}
                                 isComplicatedMain={level === 3}
                             />

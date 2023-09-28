@@ -70,20 +70,11 @@ export const blocks = [
     },
 ];
 
-export const phrases = [
-    {
-        id: 4,
-        title: 'Обучим\nновому'
-    },
-    {
-        id: 7,
-        title: 'Перспективы\nдля будущего'
-    },
-    {
-        id: 12,
-        title: 'Поддержка\n24/7'
-    },
-];
+export const phrases = {
+    4: 'Обучим\nновому',
+    7: 'Перспективы\nдля будущего',
+    12: 'Поддержка\n24/7',
+};
 
 export const empties = [
     {

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ProgressProvider } from './context/ProgressContext';
 import { useProgressInit } from './hooks/useProgressInit';
 import { FlexWrapper } from './components/shared/FlexWrapper';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const Wrapper = styled(FlexWrapper)`
   --rectPart: calc((100vw - 60px) / 4);
@@ -21,15 +22,15 @@ const Wrapper = styled(FlexWrapper)`
   white-space: pre-line;
   
   @media screen and (min-width: 450px) and (max-height: 800px) {
-    --rectSize: min(var(--rectPart), 80px);
+    --rectSize: 80px;
   }
 
   @media screen and (min-width: 450px) and (max-height: 700px) {
-    --rectSize: min(var(--rectPart), 70px);
+    --rectSize: 70px;
   }
 
   @media screen and (min-width: 450px) and (max-height: 600px) {
-    --rectSize: min(var(--rectPart), 60px);
+    --rectSize: 60px;
   }
 `;
 
