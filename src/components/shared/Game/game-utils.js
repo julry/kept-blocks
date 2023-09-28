@@ -64,7 +64,7 @@ export const checkTripleBlockCanMove = ({prevCells, emptyY, emptyX, x, y}) => {
 
 export const checkDoubleWidthBlockCanMove = ({prevCells, emptyY, emptyX, x, y}) => {
     let newEmptyCells;
-    let isNearEmptyBlocks = true;
+    let isNearEmptyBlocks;
 
     if (y !== emptyY) {
         const emptyYCells = prevCells.filter(cell => cell.y === y);
@@ -81,6 +81,7 @@ export const checkDoubleWidthBlockCanMove = ({prevCells, emptyY, emptyX, x, y}) 
         });
     } else {
         newEmptyCells = [{x: x - emptyX < 0 ? emptyX + 1 : emptyX, y: emptyY}];
+        isNearEmptyBlocks = prevCells.find(cell => cell.y === y && cell.x === (x - cell.x < 0 ? x + 1 : x));
 
         const getChangedBlocks = cell => !(cell.y === y && (cell.x === (x - emptyX < 0 ? x : x + 1)));
         return replaceEmptyBlocks({
@@ -91,7 +92,7 @@ export const checkDoubleWidthBlockCanMove = ({prevCells, emptyY, emptyX, x, y}) 
 
 export const checkDoubleHeightBlockCanMove = ({prevCells, emptyY, emptyX, x, y}) => {
     let newEmptyCells;
-    let isNearEmptyBlocks = true;
+    let isNearEmptyBlocks;
 
     if (x !== emptyX) {
         const emptyXCells = prevCells.filter(cell => cell.x === x);
@@ -105,6 +106,7 @@ export const checkDoubleHeightBlockCanMove = ({prevCells, emptyY, emptyX, x, y})
         });
 
     } else {
+        isNearEmptyBlocks = prevCells.find(cell => cell.y === (y - cell.y < 0 ? y + 1 : y) && cell.x === x);
         newEmptyCells = [{x: emptyX, y: y - emptyY < 0 ? emptyY + 1 : emptyY}];
         const getChangedBlocks = cell => !(cell.x === x && (cell.y === (y - emptyY < 0 ? y : y + 1)));
 
