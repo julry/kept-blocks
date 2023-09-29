@@ -18,12 +18,12 @@ const Wrapper = styled.div`
   & div {
     pointer-events: none;
     user-select: none;
-    border: 1px solid ${({isMain}) => isMain ? 'var(--accentColor)' : 'var(--mainBorderColor)'};
+    border: 1px solid ${({$isMain}) => $isMain ? 'var(--accentColor)' : 'var(--mainBorderColor)'};
   }
 `;
 
 export const Block = ({block, isComplicatedMain, className, onDrop, rectSize}) => {
-    const [{}, drag, preview] = useDrag(() => ({
+    const [, drag, preview] = useDrag(() => ({
         type: 'BLOCK',
         item: () => block,
         previewOptions: {
@@ -35,23 +35,44 @@ export const Block = ({block, isComplicatedMain, className, onDrop, rectSize}) =
         }),
     }), [block]);
 
-    const [__, drop] = useDrop(() => ({
+    const [, drop] = useDrop(() => ({
         accept: 'BLOCK',
         collect: monitor => ({
             hovered: monitor.canDrop() && monitor.isOver(),
         }),
         drop: (item, monitor) => {
+            let isRightPartDrag, isDownPartDrag;
+            const isDoubleHeight = item.height === rectTypes.gameDouble;
             let {x, y} = block;
             const dif = monitor.getDifferenceFromInitialOffset();
 
+            if (item.width === rectTypes.gameDouble) {
+                let {x: itemX} = monitor.getSourceClientOffset();
+                const {x: dragX} = monitor.getInitialClientOffset();
+
+                if (isDoubleHeight) itemX = itemX - rectSize;
+                if (dragX - itemX >= rectSize) isRightPartDrag = true;
+            }
+
+            if (item.height === rectTypes.gameDouble) {
+                const {y: itemY} = monitor.getSourceClientOffset();
+                const {y: dragY} = monitor.getInitialClientOffset();
+                if (dragY - itemY >= rectSize) {
+                    isDownPartDrag = true;
+                    isRightPartDrag = false;
+                }
+            }
+
             if (block.id === item.id) {
+                isDownPartDrag = false;
+                isRightPartDrag = false;
                 if (Math.abs(dif.x) > Math.abs(dif.y)) {
                     if (dif.x < 0) x = x - 1;
-                    else x = x + (block.width === rectTypes.gameDouble ? 2 : 1);
+                    else x = x + 1;
                 }
                 else {
-                    if (dif.y < 0) y = item.y - 1;
-                    else y = item.y + (block.height === rectTypes.gameDouble ? 2 : 1);
+                    if (dif.y < 0) y = y - 1;
+                    else y = y + 1;
                 }
             }
 
@@ -63,7 +84,7 @@ export const Block = ({block, isComplicatedMain, className, onDrop, rectSize}) =
                 y = y + 1;
             }
 
-            onDrop?.(item, x, y);
+            onDrop?.(item, x, y, isRightPartDrag, isDownPartDrag);
         },
     }), [block]);
 
@@ -76,14 +97,25 @@ export const Block = ({block, isComplicatedMain, className, onDrop, rectSize}) =
     );
 
     return (
-        <Wrapper ref={mergeRefs([drag, drop])} {...block} className={className} $isDraggable>
+        <Wrapper
+            ref={mergeRefs([drag, drop])}
+            className={className}
+            x={block.x}
+            y={block.y}
+            $isMain={block.isMain}
+            $isDraggable
+        >
             <Rectangle {...block} color={block.isMain ? "accent" : "main"} />
         </Wrapper>
     );
 };
 
 export const NotDragBlock = ({block, children}) =>  (
-    <Wrapper {...block}>
+    <Wrapper
+        x={block.x}
+        y={block.y}
+        $isMain={block.isMain}
+    >
         <Rectangle {...block} color={block.isMain ? "accent" : "main"}> {children} </Rectangle>
     </Wrapper>
 );

@@ -39,7 +39,14 @@ export const Board = ({blocks, onDrop, rowsAmount, phrases, children, isNotDrop,
     return (
         <Wrapper>
             {Array.from({length: rowsAmount * 4}).map((_, i) => (
-                <CellComponent key={i} rowsAmount={rowsAmount} onDrop={onDrop} id={i} isSmall={phrases[i]?.isSmall}>
+                <CellComponent
+                    key={i}
+                    id={i}
+                    rowsAmount={rowsAmount}
+                    onDrop={onDrop}
+                    rectSize={rectSize}
+                    isSmall={phrases[i]?.isSmall}
+                >
                     {phrases[i]?.title ?? phrases[i]}
                 </CellComponent>
             ))}

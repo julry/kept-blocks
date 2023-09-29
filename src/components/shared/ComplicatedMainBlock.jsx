@@ -60,7 +60,7 @@ const RectangleStyled = styled(Rectangle)`
 export const ComplicatedMainBlock = ({block, innerRef}) => {
     const additionalBlock = {...block, x: block.x + 1, height: rectTypes.game}
     return (
-        <Wrapper ref={innerRef} {...block}>
+        <Wrapper ref={innerRef} x={block.x} y={block.y}>
             <Rectangle {...block} color="accent" />
             <RectangleStyled {...additionalBlock} color="accent" />
         </Wrapper>

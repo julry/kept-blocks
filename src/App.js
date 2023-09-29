@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { ProgressProvider } from './context/ProgressContext';
 import { useProgressInit } from './hooks/useProgressInit';
 import { FlexWrapper } from './components/shared/FlexWrapper';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const Wrapper = styled(FlexWrapper)`
   --rectPart: calc((100vw - 60px) / 4);

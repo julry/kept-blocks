@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useDrop } from 'react-dnd';
+import { rectTypes } from './Rectangle';
 
 const Wrapper = styled.div`
   --fontSize: calc(var(--rectSize) * ${({$isSmall}) => $isSmall ? 8 : 11} / 80);
@@ -34,14 +35,34 @@ const Wrapper = styled.div`
   }
 `;
 
-export const Cell = ({onDrop, rowsAmount, id, children, isSmall}) => {
-    const [_, drop] = useDrop(() => ({
+export const Cell = ({onDrop, rowsAmount, id, children, isSmall, rectSize}) => {
+    const [, drop] = useDrop(() => ({
         accept: 'BLOCK',
         collect: monitor => ({
             hovered: monitor.canDrop() && monitor.isOver(),
         }),
         drop: (item, monitor) => {
-            onDrop?.(item, id % 4, Math.floor(id / 4));
+            let isRightPartDrag, isDownPartDrag;
+            const isDoubleHeight = item.height === rectTypes.gameDouble;
+
+            if (item.width === rectTypes.gameDouble) {
+                let {x: itemX} = monitor.getSourceClientOffset();
+                const {x: dragX} = monitor.getInitialClientOffset();
+
+                if (isDoubleHeight) itemX = itemX - rectSize;
+                if (dragX - itemX >= rectSize) isRightPartDrag = true;
+            }
+
+            if (isDoubleHeight) {
+                const {y: itemY} = monitor.getInitialSourceClientOffset();
+                const {y: dragY} = monitor.getInitialClientOffset();
+                if (dragY - itemY >= rectSize / 2) {
+                    isDownPartDrag = true;
+                    isRightPartDrag = false;
+                }
+            }
+
+            onDrop?.(item, id % 4, Math.floor(id / 4), isRightPartDrag, isDownPartDrag);
         },
     }), []);
 

@@ -65,7 +65,7 @@ export const Game = ({
         setIsTimer(isPrevTimer => !isPrevTimer);
     };
 
-    const handleDropBlock = async (block, dropX, dropY) => {
+    const handleDropBlock = async (block, dropX, dropY, isRightPartDrag, isDownPartDrag) => {
         if (isFinished) return;
         let x = dropX;
         let y = dropY;
@@ -75,23 +75,20 @@ export const Game = ({
 
         if (isRect && x !== block.x && y !== block.y) return;
 
-        if (isDoubleHeight) {
-            if (x !== block.x) {
-                if (!isDoubleWidth && (block.y - y === 1 || y - block.y === 2)) return;
-                else if (y - block.y === 1 && !isDoubleWidth) y = y - 1;
-            }
-            y = y + 1 > rowsAmount - 1 ? rowsAmount - 2 : (y - block.y === 2 && !isDoubleWidth) ? y - 1 : y;
-            y = y > 0 ? y : 0;
+        if (isDoubleHeight && isDoubleWidth && x - block.x === y - block.y && x - block.x === 1) {
+            if (isRightPartDrag) x = x - 1;
+            else y = y - 1;
+        } else if (isDoubleHeight && isDownPartDrag && (x !== block.x || y > block.y)) {
+            y = y - 1;
+        } else if (isDoubleWidth && isRightPartDrag && (y !== block.y || x > block.x)) {
+            x = x - 1;
         }
 
-        if (isDoubleWidth) {
-            if (y !== block.y) {
-                if (block.x - x === 1 || x - block.x === 2) return;
-                else if (x - block.x === 1) x = x - 1;
-            }
-            x = x + 1 > 3 ? 2 : x - block.x === 2 ? x - 1 : x;
-            x = x > 0 ? x : 0;
-        }
+        y = y + 1 > rowsAmount - 1 ? rowsAmount - 1 : y;
+        x = x + 1 > 4 ? 3 : x;
+
+        y = y > 0 ? y : 0;
+        x = x > 0 ? x : 0;
 
         let newBlock = {...block};
         let distance = 1;
@@ -118,12 +115,11 @@ export const Game = ({
 
         const isDoubleHeight = block.height === rectTypes.gameDouble;
         const isDoubleWidth = block.width === rectTypes.gameDouble;
-        const isTriple = isDoubleWidth && isDoubleHeight;
 
         await setEmptyCells((prevCells) => {
             const {x: emptyX, y: emptyY} = block;
 
-            if (emptyX !== x && emptyY !== y && !isTriple) return prevCells;
+            if (emptyX !== x && emptyY !== y) return prevCells;
             const { changedEmptyCells, hasChanged } = getChangedEmptyBlocks({isDoubleWidth, isDoubleHeight, prevCells, emptyY, emptyX, x, y});
 
             if (hasChanged) {

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useProgress } from '../../../hooks/useProgress';
 import { Game } from '../../shared/Game';
-import { reachMetrikaGoal } from '../../../utils/reachMetrikaGoal';
 import { RefreshButton } from '../../shared/RefreshButton';
 import { blocks, borderBottom, borderTop, phrases, empties } from './constants';
 
@@ -16,14 +14,7 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 
 export const Screen4 = () => {
     const [shownBlocks, setShownBlocks] = useState([...blocks]);
-    const [emptyCells, setEmptyCells] = useState([...empties]);
-
-    const {next} = useProgress();
-
-    const handleNext = () => {
-        reachMetrikaGoal('continue1');
-        next();
-    };
+    const [, setEmptyCells] = useState([...empties]);
 
     const handleRestart = () => {
         setShownBlocks([...blocks]);
@@ -47,9 +38,11 @@ export const Screen4 = () => {
                 </p>
             </div>
         ),
-        backText: 'В Kept тебя всегда поддержат и всему научат. Твоя карьера — в твоих руках! Наставник, бадди, более 50 тренингов\n' +
-            'по твердым и мягким навыкам, коучинг и карьерные консультации помогут расти внутри компании и видеть собственные перспективы'
-    }
+        backText: 'В Kept тебя всегда поддержат и всему научат. Твоя карьера — в твоих руках! ' +
+            'Наставник, бадди, более 50 тренингов\n' +
+            'по твердым и мягким навыкам, коучинг и карьерные консультации помогут ' +
+            'расти внутри компании и видеть собственные перспективы'
+    };
 
     return (
         <Game

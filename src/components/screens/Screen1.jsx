@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { useProgress } from '../../hooks/useProgress';
-import { FlexWrapper } from '../shared/FlexWrapper';
 import { reachMetrikaGoal } from '../../utils/reachMetrikaGoal';
+import { FlexWrapper } from '../shared/FlexWrapper';
+import { Logo } from '../shared/Logo';
 import { TopElement } from '../shared/TopElement';
 import { Button, buttonTypes } from '../shared/Button';
 import { BottomElement } from '../shared/BottomElement';
-import { Logo } from '../shared/Logo';
 import { TextMd, Title } from '../shared/Texts';
 
 const Wrapper = styled(FlexWrapper)`

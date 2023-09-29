@@ -48,8 +48,8 @@ const Board = styled.div`
 
 const EmptyPlace = styled.div`
   position: absolute;
-  left: calc(${({column}) => column} * var(--rectSize) + 5px);
-  top: calc(${({row}) => row} * var(--rectSize) + 5px);
+  left: calc(${({$column}) => $column} * var(--rectSize) + 5px);
+  top: calc(${({$row}) => $row} * var(--rectSize) + 5px);
   height: var(--rectSize);
   width: calc(${({ $emptyWidth }) => $emptyWidth ?? 1} * var(--rectSize));
   background: white;
@@ -63,14 +63,7 @@ const ExitBorder = styled.div`
   background: var(--accentColor);
   box-shadow: 5px 5px 7px rgba(56, 56, 60, 0.25);
   z-index: 4;
-`;
-
-const ExitBorderTop = styled(ExitBorder)`
-  ${({borders}) => borders};
-`;
-
-const ExitBorderBottom = styled(ExitBorder)`
-  ${({borders}) => borders};
+  ${({$borders}) => $borders};
 `;
 
 export const BoardWrapper = ({
@@ -88,9 +81,9 @@ export const BoardWrapper = ({
         <Board>
             {children}
         </Board>
-        <EmptyPlace row={row} column={column} $emptyWidth={emptyWidth}>
-            <ExitBorderTop borders={borderTop}/>
-            <ExitBorderBottom borders={borderBottom}/>
+        <EmptyPlace $row={row} $column={column} $emptyWidth={emptyWidth}>
+            <ExitBorder key={'border_top'} $borders={borderTop}/>
+            <ExitBorder key={'border_bottom'} $borders={borderBottom}/>
         </EmptyPlace>
     </Wrapper>
 );

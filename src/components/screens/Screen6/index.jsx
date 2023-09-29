@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useProgress } from '../../../hooks/useProgress';
 import { Game } from '../../shared/Game';
-import { reachMetrikaGoal } from '../../../utils/reachMetrikaGoal';
 import { RefreshButton } from '../../shared/RefreshButton';
 import { blocks, borderBottom, borderTop, phrases, styles, empties } from './constants';
 
@@ -24,19 +22,12 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 
 export const Screen6 = () => {
     const [shownBlocks, setShownBlocks] = useState([...blocks]);
-    const [emptyCells, setEmptyCells] = useState([...empties]);
-
-    const {next} = useProgress();
+    const [, setEmptyCells] = useState([...empties]);
 
     const handleRestart = () => {
         setEmptyCells([...empties]);
         setShownBlocks([...blocks]);
     }
-
-    const handleNext = () => {
-        reachMetrikaGoal('continue1');
-        next();
-    };
 
     const boardProps = {
         row: -1,

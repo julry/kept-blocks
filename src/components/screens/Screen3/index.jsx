@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useProgress } from '../../../hooks/useProgress';
-import { Game } from '../../shared/Game';
-import { reachMetrikaGoal } from '../../../utils/reachMetrikaGoal';
-import { RefreshButton } from '../../shared/RefreshButton';
 import styled from 'styled-components';
+import { Game } from '../../shared/Game';
+import { RefreshButton } from '../../shared/RefreshButton';
 import { blocks, borderBottom, borderTop, empties, phrases } from './constants';
 
 export const RefreshButtonStyled = styled(RefreshButton)`
@@ -16,18 +14,12 @@ export const RefreshButtonStyled = styled(RefreshButton)`
 
 export const Screen3 = () => {
     const [shownBlocks, setShownBlocks] = useState([...blocks]);
-    const [emptyCells, setEmptyCells] = useState([...empties]);
-    const {next} = useProgress();
-
-    const handleNext = () => {
-        reachMetrikaGoal('continue1');
-        next();
-    };
+    const [, setEmptyCells] = useState([...empties]);
 
     const handleRestart = () => {
         setEmptyCells([...empties]);
         setShownBlocks([...blocks]);
-    }
+    };
 
     const boardProps = {
         row: 2,
@@ -47,7 +39,8 @@ export const Screen3 = () => {
             </div>
         ),
         backText: 'Мы команда не только ' +
-            'на работе, но и за её пределами. Играем в «Что? Где? Когда?», футбол, бегаем, а иногда просто едим пиццу по пятницам 🍕'
+            'на работе, но и за её пределами. Играем в «Что? Где? Когда?», футбол, ' +
+            'бегаем, а иногда просто едим пиццу по пятницам 🍕'
     }
 
     return (

@@ -71,8 +71,7 @@ export const phrases = {
         'с руководи-\n' +
         'телем',
     14: 'Друллеги'
-}
-
+};
 
 export const empties = [
     {
