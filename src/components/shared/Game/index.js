@@ -48,7 +48,6 @@ export const Game = ({
      phrases,
      rowsAmount,
      cardProps,
-     isFinish,
      onDragStart,
      setShownBlocks,
      winCol,
@@ -79,9 +78,9 @@ export const Game = ({
         if (isDoubleHeight) {
             if (x !== block.x) {
                 if (!isDoubleWidth && (block.y - y === 1 || y - block.y === 2)) return;
-                else if (y - block.y === 1) y = y - 1;
+                else if (y - block.y === 1 && !isDoubleWidth) y = y - 1;
             }
-            y = y + 1 > rowsAmount - 1 ? rowsAmount - 2 : y - block.y === 2 ? y - 1 : y;
+            y = y + 1 > rowsAmount - 1 ? rowsAmount - 2 : (y - block.y === 2 && !isDoubleWidth) ? y - 1 : y;
             y = y > 0 ? y : 0;
         }
 
@@ -119,9 +118,12 @@ export const Game = ({
 
         const isDoubleHeight = block.height === rectTypes.gameDouble;
         const isDoubleWidth = block.width === rectTypes.gameDouble;
+        const isTriple = isDoubleWidth && isDoubleHeight;
 
         await setEmptyCells((prevCells) => {
             const {x: emptyX, y: emptyY} = block;
+
+            if (emptyX !== x && emptyY !== y && !isTriple) return prevCells;
             const { changedEmptyCells, hasChanged } = getChangedEmptyBlocks({isDoubleWidth, isDoubleHeight, prevCells, emptyY, emptyX, x, y});
 
             if (hasChanged) {
