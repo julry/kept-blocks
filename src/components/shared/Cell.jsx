@@ -46,7 +46,7 @@ export const Cell = ({onDrop, rowsAmount, id, children, isSmall, rectSize}) => {
             const isDoubleHeight = item.height === rectTypes.gameDouble;
 
             if (item.width === rectTypes.gameDouble) {
-                let {x: itemX} = monitor.getSourceClientOffset();
+                let {x: itemX} = monitor.getInitialSourceClientOffset();
                 const {x: dragX} = monitor.getInitialClientOffset();
 
                 if (isDoubleHeight) itemX = itemX - rectSize;
@@ -56,7 +56,7 @@ export const Cell = ({onDrop, rowsAmount, id, children, isSmall, rectSize}) => {
             if (isDoubleHeight) {
                 const {y: itemY} = monitor.getInitialSourceClientOffset();
                 const {y: dragY} = monitor.getInitialClientOffset();
-                if (dragY - itemY >= rectSize / 2) {
+                if (dragY - itemY >= rectSize + 5) {
                     isDownPartDrag = true;
                     isRightPartDrag = false;
                 }

@@ -47,7 +47,7 @@ export const Block = ({block, isComplicatedMain, className, onDrop, rectSize}) =
             const dif = monitor.getDifferenceFromInitialOffset();
 
             if (item.width === rectTypes.gameDouble) {
-                let {x: itemX} = monitor.getSourceClientOffset();
+                let {x: itemX} = monitor.getInitialSourceClientOffset();
                 const {x: dragX} = monitor.getInitialClientOffset();
 
                 if (isDoubleHeight) itemX = itemX - rectSize;
@@ -55,9 +55,9 @@ export const Block = ({block, isComplicatedMain, className, onDrop, rectSize}) =
             }
 
             if (item.height === rectTypes.gameDouble) {
-                const {y: itemY} = monitor.getSourceClientOffset();
+                const {y: itemY} = monitor.getInitialSourceClientOffset();
                 const {y: dragY} = monitor.getInitialClientOffset();
-                if (dragY - itemY >= rectSize) {
+                if (dragY - itemY >= rectSize + 5) {
                     isDownPartDrag = true;
                     isRightPartDrag = false;
                 }
