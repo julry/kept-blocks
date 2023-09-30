@@ -118,16 +118,15 @@ export const styles = `
     border-top-right-radius: 0;
     
     @media screen and (max-height: 850px) {
-        transform: scale(0.9);
-        margin-top: min(35px, 10vw) !important;
+        margin-top: min(35px, 9vw) !important;
     }
     
     @media screen and (max-height: 700px) {
-        margin-top: min(25px, 8vw) !important;
+        margin-top: min(25px, 6vw) !important;
     }
     
     @media screen and (max-height: 600px) {
-        margin-top: min(17px, 6vw) !important;
+        margin-top: min(17px, 4vw) !important;
     }
 `;
 

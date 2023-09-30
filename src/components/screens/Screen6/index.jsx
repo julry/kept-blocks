@@ -8,13 +8,13 @@ export const RefreshButtonStyled = styled(RefreshButton)`
   margin-top: min(25px, 8.5vw);
   
   @media screen and (max-height: 850px) {
-    margin-top: 0;
+    margin-top: min(20px, 5vw);
     width: min(60px, 18.6vw);
     height: min(60px, 18.6vw);
   }
 
   @media screen and (max-height: 700px) {
-    margin-top: 0;
+    margin-top: min(15px, 4vw);
     width: min(40px, 13.6vw);
     height: min(40px, 13.6vw);
   }
