@@ -50,7 +50,7 @@ const Side = styled.div`
   align-items: center;
   border-radius: 10px;
   box-shadow: 0 0 5px 2px rgba(50, 50, 50, 0.25);
-  position: absolute;
+  position: ${({$isActive}) => $isActive ? 'static' : 'absolute'};
   backface-visibility: hidden;
   border: 3px solid var(--accentColor);
   padding: 0 30px;
@@ -96,8 +96,8 @@ export const ResultCard = ({frontText, backText, level, btnText}) => {
         <Wrapper>
             <TopElement isUpperRect />
             <Card $isTurn={isTurned}>
-                <Front>{frontText()}</Front>
-                <Back>{backText}</Back>
+                <Front $isActive={!isTurned}>{frontText()}</Front>
+                <Back $isActive={isTurned}>{backText}</Back>
             </Card>
             <Button type="main" onClick={handleClick}>
                 {isTurned ? btnText ?? `Уровень ${level + 1}` : 'Открыть'}
