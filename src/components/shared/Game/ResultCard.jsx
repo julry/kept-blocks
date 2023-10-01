@@ -51,10 +51,13 @@ const Side = styled.div`
   border-radius: 10px;
   box-shadow: 0 0 5px 2px rgba(50, 50, 50, 0.25);
   position: ${({$isActive}) => $isActive ? 'static' : 'absolute'};
+  top: 0;
+  left: 0;
   backface-visibility: hidden;
   border: 3px solid var(--accentColor);
   padding: 0 30px;
   font-size: 20px;
+  z-index: ${({$isActive}) => $isActive ? '3' : '1'};
 
   @media screen and (max-height: 800px) {
     font-size: 18px;
