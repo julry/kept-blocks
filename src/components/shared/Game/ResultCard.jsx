@@ -55,7 +55,7 @@ const Side = styled.div`
   left: 0;
   -webkit-perspective: 0;
   -webkit-transform: translate3d(0,0,0);
-  visibility:visible;
+  visibility: ${({$isActive, $isFinishTurning}) => $isFinishTurning && !$isActive  ? 'hidden' : 'visible' };
   backface-visibility: hidden;
   border: 3px solid var(--accentColor);
   padding: 0 30px;
@@ -92,18 +92,22 @@ const Back = styled(Side)`
 export const ResultCard = ({frontText, backText, level, btnText}) => {
     const { next } = useProgress();
     const [isTurned, setIsTurned] = useState(false);
+    const [isFinishTurning, setIsFinishTurning] = useState(false);
 
     const handleClick = () => {
         if (isTurned) next();
-        else setIsTurned(true);
+        else {
+            setIsTurned(true);
+            setTimeout(() => setIsFinishTurning(true), 1500)
+        }
     };
 
     return (
         <Wrapper>
             <TopElement isUpperRect />
             <Card $isTurn={isTurned}>
-                <Front $isActive={!isTurned}>{frontText()}</Front>
-                <Back $isActive={isTurned}>{backText}</Back>
+                <Front $isActive={!isTurned} $isFinishTurning={isFinishTurning}>{frontText()}</Front>
+                <Back $isActive={isTurned} $isFinishTurning={isFinishTurning}>{backText}</Back>
             </Card>
             <Button type="main" onClick={handleClick}>
                 {isTurned ? btnText ?? `Уровень ${level + 1}` : 'Открыть'}
