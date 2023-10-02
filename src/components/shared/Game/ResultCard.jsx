@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useState } from 'react';
 import { Button } from '../Button';
 import { useProgress } from '../../../hooks/useProgress';
@@ -31,6 +31,7 @@ const Card = styled.div`
   transition: transform 1100ms;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden !important;
   ${({$isTurn}) => $isTurn ? 'transform: rotateY(180deg)' : ''};
 
   @media screen and (max-height: 800px) {
@@ -51,11 +52,12 @@ const Side = styled.div`
   align-items: center;
   border-radius: 10px;
   box-shadow: 0 0 5px 2px rgba(50, 50, 50, 0.25);
-  position: ${({$isActive}) => $isActive ? 'static' : 'absolute'};
+  position: absolute;
   top: 0;
   left: 0;
   -webkit-perspective: 600px;
   -webkit-transform: translate3d(0,0,0);
+  -webkit-backface-visibility: hidden !important;
   backface-visibility: hidden;
   border: 3px solid var(--accentColor);
   padding: 0 30px;
@@ -84,11 +86,22 @@ const Front = styled(Side)`
   visibility: ${({$isFinishTurning}) => $isFinishTurning  ? 'hidden' : 'visible' };
 `;
 
+const show = keyframes`
+  0% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: visible;
+  }
+`;
+
 const Back = styled(Side)`
   transform: rotateY(180deg);
   background: white;
   visibility: visible;
   z-index: 3;
+  animation: ${({$isTurned}) => $isTurned ? show : ''} 50 backwards;
+  animation-delay: 595ms;
 `;
 
 export const ResultCard = ({frontText, backText, level, btnText}) => {
@@ -109,7 +122,7 @@ export const ResultCard = ({frontText, backText, level, btnText}) => {
             <TopElement isUpperRect />
             <Card $isTurn={isTurned}>
                 <Front $isActive={!isTurned} $isFinishTurning={isFinishTurning}>{frontText()}</Front>
-                <Back $isActive={isTurned} $isFinishTurning={isFinishTurning}>{backText}</Back>
+                <Back $isTurn={isTurned} $isActive={isTurned} $isFinishTurning={isFinishTurning}>{backText}</Back>
             </Card>
             <Button type="main" onClick={handleClick}>
                 {isTurned ? btnText ?? `Уровень ${level + 1}` : 'Открыть'}
