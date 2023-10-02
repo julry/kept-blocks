@@ -27,7 +27,8 @@ const Card = styled.div`
   height: calc(var(--rectSize) * var(--heightK));
   width: 100%;
   position: relative;
-  transition: transform 1500ms;
+  perspective: 600px;
+  transition: transform 1100ms;
   transform-style: preserve-3d;
   backface-visibility: hidden;
   ${({$isTurn}) => $isTurn ? 'transform: rotateY(180deg)' : ''};
@@ -53,9 +54,8 @@ const Side = styled.div`
   position: ${({$isActive}) => $isActive ? 'static' : 'absolute'};
   top: 0;
   left: 0;
-  -webkit-perspective: 0;
+  -webkit-perspective: 600px;
   -webkit-transform: translate3d(0,0,0);
-  visibility: ${({$isActive, $isFinishTurning}) => $isFinishTurning && !$isActive  ? 'hidden' : 'visible' };
   backface-visibility: hidden;
   border: 3px solid var(--accentColor);
   padding: 0 30px;
@@ -81,11 +81,13 @@ const Front = styled(Side)`
   background: var(--accentColor);
   color: white;
   z-index: 2;
+  visibility: ${({$isFinishTurning}) => $isFinishTurning  ? 'hidden' : 'visible' };
 `;
 
 const Back = styled(Side)`
   transform: rotateY(180deg);
   background: white;
+  visibility: visible;
   z-index: 3;
 `;
 
@@ -98,7 +100,7 @@ export const ResultCard = ({frontText, backText, level, btnText}) => {
         if (isTurned) next();
         else {
             setIsTurned(true);
-            setTimeout(() => setIsFinishTurning(true), 1500)
+            setTimeout(() => setIsFinishTurning(true), 545);
         }
     };
 
