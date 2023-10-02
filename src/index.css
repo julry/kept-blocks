@@ -22,3 +22,7 @@ button {
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   cursor: pointer;
 }
+
+html {
+  overscroll-behavior: none
+}

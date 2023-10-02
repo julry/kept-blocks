@@ -75,9 +75,10 @@ export const BoardWrapper = ({
      borderBottom,
      children,
      styles,
+     innerRef,
      emptyWidth = 1
 }) => (
-    <Wrapper className={className} $rowsAmount={rowsAmount} styles={styles}>
+    <Wrapper ref={innerRef} className={className} $rowsAmount={rowsAmount} styles={styles}>
         <Board>
             {children}
         </Board>

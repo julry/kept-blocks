@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
@@ -12,10 +12,11 @@ import { Modal } from '../Modal';
 import { ResultCard } from './ResultCard';
 import { rectTypes } from '../Rectangle';
 import { getChangedEmptyBlocks } from './game-utils';
+import { OutBoard } from './OutBoard';
 
 const HeaderStyled = styled(Header)`
     @media screen and (max-height: 600px) {
-      display: ${({$isFinished}) => $isFinished ? 'none' : 'finish'};
+      display: ${({$isFinished}) => $isFinished ? 'none' : 'flex'};
     }
 `;
 
@@ -58,6 +59,7 @@ export const Game = ({
     const [isTimer, setIsTimer] = useState(true);
     const [isRules, setIsRules] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
+    const $boardRef = useRef();
 
     const handleTurnRules = () => {
         if (isFinished) return;
@@ -159,7 +161,7 @@ export const Game = ({
     };
 
     return (
-        <>
+        <DndProvider options={HTML5toTouch}>
             <GameWrapper $isBlurred={isRules}>
                 <HeaderStyled level={level} isStart={isTimer && !isFinished} onBtnClick={handleTurnRules} $isFinished={isFinished}/>
                 {isFinished ? (
@@ -168,8 +170,8 @@ export const Game = ({
                         <ResultCard {...cardProps} level={level}/>
                     </>
                 ) : (
-                    <DndProvider options={HTML5toTouch}>
-                        <BoardWrapperStyled {...boardProps} rowsAmount={rowsAmount}>
+                    <>
+                        <BoardWrapperStyled {...boardProps} rowsAmount={rowsAmount} innerRef={$boardRef}>
                             <Board
                                 blocks={blocks}
                                 rowsAmount={rowsAmount}
@@ -180,9 +182,12 @@ export const Game = ({
                             />
                         </BoardWrapperStyled>
                         {children}
-                    </DndProvider>
+                    </>
                 )}
-
+            <OutBoard type={'horizontal'} side={'top'} boardRef={$boardRef} onDrop={handleDropBlock}/>
+            <OutBoard type={'horizontal'} side={'bottom'} boardRef={$boardRef} rowsAmount={rowsAmount} onDrop={handleDropBlock}/>
+            <OutBoard type={'vertical'} side={'left'} onDrop={handleDropBlock}/>
+            <OutBoard type={'vertical'} side={'right'} onDrop={handleDropBlock}/>
             </GameWrapper>
             {isRules && (
                 <Modal onBtnClick={handleTurnRules} isButton>
@@ -193,6 +198,6 @@ export const Game = ({
                     </p>
                 </Modal>
             )}
-        </>
+        </DndProvider>
     );
 };

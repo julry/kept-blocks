@@ -53,6 +53,9 @@ const Side = styled.div`
   position: ${({$isActive}) => $isActive ? 'static' : 'absolute'};
   top: 0;
   left: 0;
+  -webkit-perspective: 0;
+  -webkit-transform: translate3d(0,0,0);
+  visibility:visible;
   backface-visibility: hidden;
   border: 3px solid var(--accentColor);
   padding: 0 30px;
