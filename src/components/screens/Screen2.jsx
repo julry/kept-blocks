@@ -112,7 +112,7 @@ export const Screen2 = () => {
     return (
         <>
             <GameWrapper $isBlurred={!isFirstStep}>
-                <Header shownTime="00:05" level={1}/>
+                <Header shownTime="00:05" title={'Правила'}/>
                 <BoardWrapperStyled rowsAmount={4} row={2} column={4} borderTop={borderTop} borderBottom={borderBottom}>
                     {isFirstStep && (
                         <>

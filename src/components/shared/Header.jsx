@@ -46,9 +46,9 @@ const TimerWrapper = styled(Wrapper)`
     justify-content: flex-end;
 `;
 
-export const Header = ({className, onBtnClick, level, isStart, isStopped, shownTime}) => (
+export const Header = ({className, onBtnClick, level, isStart, isStopped, shownTime, title}) => (
     <Wrapper className={className}>
-        <Title>Уровень {level}</Title>
+        <Title>{title ?? `Уровень ${level}`}</Title>
         <TimerWrapper>
             <Timer shownTime={shownTime} isStopped={isStopped} isStart={isStart} />
             <InfoButton onClick={onBtnClick}/>
