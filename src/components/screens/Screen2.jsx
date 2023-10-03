@@ -98,13 +98,8 @@ export const Screen2 = () => {
     const {next} = useProgress();
 
     const handleNext = () => {
-        reachMetrikaGoal('level1');
+        reachMetrikaGoal('start');
         next();
-    };
-
-    const handleChangeStep = () => {
-        reachMetrikaGoal('level1');
-        setStep(prevStep => prevStep + 1);
     };
 
     const isFirstStep = step === 0;
@@ -130,7 +125,12 @@ export const Screen2 = () => {
                     <Accent width={rectTypes.game} height={rectTypes.game}/>
                 </BoardWrapperStyled>
                 {isFirstStep ? (
-                    <ButtonStyled type={buttonTypes.main} onClick={handleChangeStep}>Далее</ButtonStyled>
+                    <ButtonStyled
+                        type={buttonTypes.main}
+                        onClick={() => setStep(prevStep => prevStep + 1)}
+                    >
+                        Далее
+                    </ButtonStyled>
                 ) : (
                     <RefreshButtonStyled />
                 )}
@@ -139,12 +139,12 @@ export const Screen2 = () => {
                 <Modal>
                     <ModalText>
                         Под фигурами на поле <b>скрыты фразы,</b> из них ты узнаешь
-                        {'\n'}об атмосфере в Kept.{'\n'}
+                        об{'\u00A0'}атмосфере в Kept.{'\n'}
                         Каждый уровень будет открывать тебе <b>преимущества</b> работы в компании.
                         <br/>
                         <br/>
                         Выйди за все рамки, узнай максимум подробностей
-                        {'\n'}и получи призы!
+                        и{'\u00A0'}получи призы!
                     </ModalText>
                     <NextButton type={buttonTypes.main} onClick={handleNext}>Старт</NextButton>
                 </Modal>

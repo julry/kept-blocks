@@ -58,7 +58,7 @@ export const Game = ({
 }) => {
     const [isTimer, setIsTimer] = useState(true);
     const [isRules, setIsRules] = useState(false);
-    const [isFinished, setIsFinished] = useState(false);
+    const [isFinished, setIsFinished] = useState(true);
     const $boardRef = useRef();
 
     const handleTurnRules = () => {

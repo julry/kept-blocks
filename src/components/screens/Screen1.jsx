@@ -54,7 +54,7 @@ export const Screen1 = () => {
     const { next } = useProgress();
 
     const handleNext = () => {
-        reachMetrikaGoal('start');
+        reachMetrikaGoal('go');
         next();
     };
 
@@ -64,7 +64,7 @@ export const Screen1 = () => {
             <TopElement isUpperRect />
             <TextWrapper>
                 <Title>
-                    {'Выходить за рамки скучных решений и стирать все грани привычных сценариев. '}
+                    {'Выходить за рамки скучных решений и\u00A0стирать все грани привычных сценариев. '}
                 </Title>
                 <br/>
                 <SubTitle>
@@ -72,9 +72,9 @@ export const Screen1 = () => {
                 </SubTitle>
                 <br/>
                 <TextMd>
-                    {'В конце игры ты узнаешь главный секрет, который делает карьеру\n' +
-                        'в компании такой гибкой \n' +
-                        'и динамичной! К тому же сможешь поучаствовать в розыгрыше призов ;)'}
+                    {'В конце игры ты узнаешь главный секрет, который делает карьеру ' +
+                        'в\u00A0компании такой гибкой ' +
+                        'и\u00A0динамичной! К тому же сможешь поучаствовать в розыгрыше призов ;)'}
                 </TextMd>
             </TextWrapper>
             <Button type={buttonTypes.main} onClick={handleNext}>Вперёд</Button>

@@ -4,6 +4,7 @@ import { Button } from '../Button';
 import { useProgress } from '../../../hooks/useProgress';
 import { TopElement } from '../TopElement';
 import { BottomElement } from '../BottomElement';
+import { reachMetrikaGoal } from '../../../utils/reachMetrikaGoal';
 
 const Wrapper = styled.div`
   margin-top: min(64px, 16.4vw);
@@ -110,8 +111,12 @@ export const ResultCard = ({frontText, backText, level, btnText}) => {
     const [isFinishTurning, setIsFinishTurning] = useState(false);
 
     const handleClick = () => {
-        if (isTurned) next();
+        if (isTurned) {
+            if (level === 3) reachMetrikaGoal('end');
+            next();
+        }
         else {
+            reachMetrikaGoal('fact' + level);
             setIsTurned(true);
             setTimeout(() => setIsFinishTurning(true), 545);
         }

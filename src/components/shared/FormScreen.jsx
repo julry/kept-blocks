@@ -200,7 +200,7 @@ export const FormScreen = ({children, className, isDouble}) => {
         const myRequest = new Request(GOOGLE_FORM_ACTION_URL, myInit);
 
         fetch(myRequest).then(() => {
-            reachMetrikaGoal('phone');
+            if (!isDouble) reachMetrikaGoal('email1');
             setIsSend(true);
         }).finally(() => {
             setIsSending(false);
@@ -208,7 +208,7 @@ export const FormScreen = ({children, className, isDouble}) => {
 
         if (isDouble) {
             const secondRequest = new Request(GOOGLE_FORM_ACTION_URL, myInit);
-            fetch(secondRequest).then(() => {});
+            fetch(secondRequest).then(() => reachMetrikaGoal('email2'));
         }
     };
 
