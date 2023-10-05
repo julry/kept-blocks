@@ -1,1 +1,7 @@
-export const ANIMATION_DELAY = 200;
+export const ANIMATION_DELAY = 150;
+
+export const ANIMATION_RULES = 550;
+
+export const ANIMATION_MODAL = 200;
+
+export const MOVE_ANIMATION_DELAY = 2 * ANIMATION_RULES + 5 * ANIMATION_DELAY + 100;

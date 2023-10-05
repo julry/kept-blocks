@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import arrow from '../../assets/images/arrow.svg';
 import { useProgress } from '../../hooks/useProgress';
 import { reachMetrikaGoal } from '../../utils/reachMetrikaGoal';
+import { ANIMATION_DELAY, ANIMATION_RULES, MOVE_ANIMATION_DELAY } from '../../constants';
 import { Header } from '../shared/Header';
 import { BoardWrapper } from '../shared/BoardWrapper';
 import { Button, buttonTypes } from '../shared/Button';
@@ -13,6 +14,8 @@ import { RefreshButtonStyled } from './Screen3';
 import { blocks, borderBottom, borderTop, phrases } from './Screen3/constants';
 import { TextBlock } from '../shared/TextBlock';
 import { Modal } from '../shared/Modal';
+import { appear } from '../shared/keyframes';
+import { AnimationRules } from '../shared/AnimationRules';
 
 const ButtonStyled = styled(Button)`
   margin-top: min(90px, 23vw);
@@ -50,11 +53,59 @@ const ArrowRight = styled.div`
   z-index: 100;
 `;
 
+const move = keyframes`
+  0% {
+    left: 0;
+  }
+
+  35% {
+    left: var(--rectSize);
+  }
+  
+  65% {
+    left: var(--rectSize);
+  }
+  
+  100% {
+    left: 0;
+  }
+`;
+
 const Accent = styled(Rectangle)`
   position: absolute;
   top: calc(3 * var(--rectSize));
   left: 0;
   box-shadow: 0 0 20px 10px #7741FB;
+  z-index: 4;
+  animation: ${appear} ${ANIMATION_RULES}ms both ease-in, ${move} ${5 * ANIMATION_RULES}ms ease-in-out both infinite;
+  animation-delay: ${1.2 * ANIMATION_DELAY}ms, ${MOVE_ANIMATION_DELAY}ms;
+`;
+
+const MainBlock = styled(Rectangle)`
+  position: absolute;
+  top: calc(3 * var(--rectSize));
+  left: 0;
+  z-index: 5;
+  animation: ${move} ${5 * ANIMATION_RULES}ms ease-in-out both infinite;
+  animation-delay: ${MOVE_ANIMATION_DELAY}ms;
+`;
+
+const darkenAnim = keyframes`
+  from {
+      background: rgba(159, 159, 159, 0);
+  }
+  
+  to {
+    background: rgba(159, 159, 159, 0.4);
+  }
+`;
+
+const Darken = styled.div`
+  position: absolute;
+  inset: 0;
+  animation: ${darkenAnim} ${ANIMATION_RULES}ms both ease-in;
+  animation-delay: ${ANIMATION_DELAY}ms;
+  z-index: 3;
 `;
 
 const NextButton = styled(Button)`
@@ -93,6 +144,13 @@ const BoardWrapperStyled = styled(BoardWrapper)`
 `;
 
 
+const AnimationRulesStyled = styled(AnimationRules)`
+  position: absolute;
+  z-index: 10;
+  top: calc(3.5 * var(--rectSize));
+  left: 0;
+`;
+
 export const Screen2 = () => {
     const [step, setStep] = useState(0);
     const {next} = useProgress();
@@ -103,6 +161,7 @@ export const Screen2 = () => {
     };
 
     const isFirstStep = step === 0;
+    const rulesBlocks = blocks.filter(({id}) => id !== 'main');
 
     return (
         <>
@@ -121,8 +180,11 @@ export const Screen2 = () => {
                             <ArrowRight/>
                         </>
                     )}
-                    <Board blocks={blocks} rowsAmount={4} phrases={phrases} isNotDrop/>
+                    <Darken />
+                    <Board blocks={rulesBlocks} rowsAmount={4} phrases={phrases} isNotDrop/>
+                    <MainBlock color={'accent'} width={rectTypes.game} height={rectTypes.game}/>
                     <Accent width={rectTypes.game} height={rectTypes.game}/>
+                    <AnimationRulesStyled />
                 </BoardWrapperStyled>
                 {isFirstStep ? (
                     <ButtonStyled

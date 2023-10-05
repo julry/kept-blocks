@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { TextBlock } from './TextBlock';
-import { ANIMATION_DELAY } from '../../constants';
+import { ANIMATION_MODAL } from '../../constants';
 import { Button, buttonTypes } from './Button';
 import { FlexWrapper } from './FlexWrapper';
 
@@ -32,7 +32,7 @@ const appear = keyframes`
 
 const Block = styled(TextBlock)`
   opacity: 0;
-  animation: ${appear} ${ANIMATION_DELAY}ms ease-in forwards;
+  animation: ${appear} ${ANIMATION_MODAL}ms ease-in forwards;
 `;
 
 export const Modal = (props) => (
