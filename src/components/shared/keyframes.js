@@ -9,3 +9,12 @@ export const appear = keyframes`
     opacity: 1;
   }
 `;
+
+export const disappear = keyframes`
+  0% {
+   opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`;

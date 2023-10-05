@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import arrow from '../../assets/images/arrow.svg';
 import { useProgress } from '../../hooks/useProgress';
 import { reachMetrikaGoal } from '../../utils/reachMetrikaGoal';
-import { ANIMATION_DELAY, ANIMATION_RULES, MOVE_ANIMATION_DELAY } from '../../constants';
+import { ANIMATION_DELAY, ANIMATION_RULES, MOVE_ANIMATION_DELAY, MOVE_ANIMATION_DURATION } from '../../constants';
 import { Header } from '../shared/Header';
 import { BoardWrapper } from '../shared/BoardWrapper';
 import { Button, buttonTypes } from '../shared/Button';
@@ -57,12 +57,14 @@ const move = keyframes`
   0% {
     left: 0;
   }
-
-  35% {
+  
+  100% {
     left: var(--rectSize);
   }
-  
-  65% {
+`;
+
+const moveBack = keyframes`
+  0% {
     left: var(--rectSize);
   }
   
@@ -77,8 +79,8 @@ const Accent = styled(Rectangle)`
   left: 0;
   box-shadow: 0 0 20px 10px #7741FB;
   z-index: 4;
-  animation: ${appear} ${ANIMATION_RULES}ms both ease-in, ${move} ${5 * ANIMATION_RULES}ms ease-in-out both infinite;
-  animation-delay: ${1.2 * ANIMATION_DELAY}ms, ${MOVE_ANIMATION_DELAY}ms;
+  animation: ${({$isAnimation}) => $isAnimation ? appear : ''} ${ANIMATION_RULES}ms both ease-in, ${move} ${MOVE_ANIMATION_DURATION}ms ease-in-out both, ${moveBack} ${MOVE_ANIMATION_DURATION}ms ease-in-out forwards;
+  animation-delay: ${1.2 * ANIMATION_DELAY}ms, ${MOVE_ANIMATION_DELAY}ms, ${2 * MOVE_ANIMATION_DELAY + 500}ms;
 `;
 
 const MainBlock = styled(Rectangle)`
@@ -86,8 +88,8 @@ const MainBlock = styled(Rectangle)`
   top: calc(3 * var(--rectSize));
   left: 0;
   z-index: 5;
-  animation: ${move} ${5 * ANIMATION_RULES}ms ease-in-out both infinite;
-  animation-delay: ${MOVE_ANIMATION_DELAY}ms;
+  animation: ${move} ${MOVE_ANIMATION_DURATION}ms ease-in-out both, ${moveBack} ${MOVE_ANIMATION_DURATION}ms ease-in-out forwards;
+  animation-delay: ${MOVE_ANIMATION_DELAY}ms, ${2 * MOVE_ANIMATION_DELAY + 500}ms;
 `;
 
 const darkenAnim = keyframes`
@@ -153,12 +155,30 @@ const AnimationRulesStyled = styled(AnimationRules)`
 
 export const Screen2 = () => {
     const [step, setStep] = useState(0);
+    const [isAnimation, setIsAnimation] = useState(true);
+    const [shouldAnimate, setShouldAnimate] = useState(true);
     const {next} = useProgress();
+    const $keyBlock = useRef('key');
 
     const handleNext = () => {
         reachMetrikaGoal('start');
         next();
     };
+
+    useEffect(() => {
+        if (isAnimation) {
+            setTimeout(() => {
+                setIsAnimation(false);
+                setShouldAnimate(false);
+            }, MOVE_ANIMATION_DELAY + MOVE_ANIMATION_DURATION + ANIMATION_RULES);
+        }
+        else {
+            setTimeout(() => {
+                $keyBlock.current = Math.random() * 10 + 'key';
+                setIsAnimation(true);
+            },  500 + MOVE_ANIMATION_DURATION);
+        }
+    }, [isAnimation]);
 
     const isFirstStep = step === 0;
     const rulesBlocks = blocks.filter(({id}) => id !== 'main');
@@ -182,9 +202,19 @@ export const Screen2 = () => {
                     )}
                     <Darken />
                     <Board blocks={rulesBlocks} rowsAmount={4} phrases={phrases} isNotDrop/>
-                    <MainBlock color={'accent'} width={rectTypes.game} height={rectTypes.game}/>
-                    <Accent width={rectTypes.game} height={rectTypes.game}/>
-                    <AnimationRulesStyled />
+                    <MainBlock
+                        key={$keyBlock.current + '_main'}
+                        color={'accent'}
+                        width={rectTypes.game}
+                        height={rectTypes.game}
+                    />
+                    <Accent
+                        key={$keyBlock.current + '_accent'}
+                        width={rectTypes.game}
+                        height={rectTypes.game}
+                        $isAnimation={shouldAnimate}
+                    />
+                    {isAnimation && <AnimationRulesStyled/>}
                 </BoardWrapperStyled>
                 {isFirstStep ? (
                     <ButtonStyled
